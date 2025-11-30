@@ -1,0 +1,189 @@
+/* Layout */
+.analytics-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.analytics-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-content {
+  flex: 1 1 auto;
+  margin-left: 80px;
+  padding: 24px 40px;
+  min-width: 0;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Page header */
+.analytics-header {
+  margin-bottom: 24px;
+}
+
+.analytics-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6A6B70;
+  margin: 0;
+}
+
+/* Sections */
+.analytics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.analytics-section {
+  width: 100%;
+}
+
+.analytics-card {
+  background: transparent;
+  padding: 0;
+}
+
+/* Title row */
+.analytics-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 8px 0;
+}
+
+.analytics-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #00d907;
+  margin: 0;
+  line-height: 1;
+}
+
+/* 3-dot menu button */
+.analytics-card-menu {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999999;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* Paragraph under title */
+.analytics-card-description {
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.6;
+  margin: 8px 0 0 0;
+  max-width: 640px;
+}
+
+.analytics-card-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Content area */
+.analytics-card-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Metric area */
+.analytics-metric {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 140px;
+  text-align: right;
+}
+
+.analytics-metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #00d907;
+}
+
+/* Chart spacing */
+.analytics-chart-container {
+  margin-top: 8px;
+}
+
+.resolved-chart-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* Tooltip */
+.analytics-tooltip {
+  background: #0d0e0e;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.analytics-tooltip-label {
+  font-size: 12px;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+  opacity: 0.9;
+}
+
+.analytics-tooltip-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Total chats card */
+.total-chats-card .analytics-card-title {
+  color: #00d907;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .analytics-metric {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .analytics-card-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .analytics-metric {
+    align-self: flex-start;
+    text-align: left;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+  .analytics-layout Sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-content {
+    margin-left: 0;
+    padding: 16px;
+    margin-bottom: 70px;
+    max-width: none;
+  }
+}

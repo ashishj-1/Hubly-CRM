@@ -1,0 +1,78 @@
+/* Layout */
+.team-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+/* Loading State */
+.team-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main Content Area */
+.team-content {
+  flex: 1;
+  margin-left: 80px;
+  padding: 24px;
+  min-width: 0;
+}
+
+/* Header */
+.team-header {
+  margin-bottom: 24px;
+}
+
+.team-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6A6B70;
+  margin: 0;
+}
+
+/* Main Section Wrapper (for the add button positioning) */
+.team-main {
+  position: relative;
+}
+
+/* Add Member Button */
+.team-add-btn {
+  position: absolute;
+  bottom: -60px;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #184e7f;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* Add Member Button Hover */
+.team-add-btn:hover {
+  background: #243542;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .team-add-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+  }
+}
