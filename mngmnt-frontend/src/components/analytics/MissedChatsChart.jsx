@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 // Custom tooltip for the chart
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -49,22 +49,31 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const MissedChatsChart = ({ data = [] }) => {
-  // Default chart data
-  const chartData =
-    data.length > 0
-      ? data
-      : [
-          { week: "Week 1", chats: 12 },
-          { week: "Week 2", chats: 14 },
-          { week: "Week 3", chats: 9 },
-          { week: "Week 4", chats: 10 },
-          { week: "Week 5", chats: 13 },
-          { week: "Week 6", chats: 5 },
-          { week: "Week 7", chats: 8 },
-          { week: "Week 8", chats: 9 },
-          { week: "Week 9", chats: 15 },
-          { week: "Week 10", chats: 12 },
-        ];
+  // Keep default dataset for empty state, but recompute when prop changes
+  const chartData = useMemo(
+    () =>
+      data.length > 0
+        ? data
+        : [
+            { week: "Week 1", chats: 12 },
+            { week: "Week 2", chats: 14 },
+            { week: "Week 3", chats: 9 },
+            { week: "Week 4", chats: 10 },
+            { week: "Week 5", chats: 13 },
+            { week: "Week 6", chats: 5 },
+            { week: "Week 7", chats: 8 },
+            { week: "Week 8", chats: 9 },
+            { week: "Week 9", chats: 15 },
+            { week: "Week 10", chats: 12 },
+          ],
+    [data]
+  );
+
+  // Key forces Recharts to fully refresh when data shape changes
+  const chartKey = useMemo(
+    () => chartData.map((d) => `${d.week}:${d.chats}`).join("|"),
+    [chartData]
+  );
 
   return (
     <div className="analytics-card">
@@ -110,6 +119,7 @@ const MissedChatsChart = ({ data = [] }) => {
       <div style={{ width: "100%", height: 280 }}>
         <ResponsiveContainer>
           <LineChart
+            key={chartKey}
             data={chartData}
             margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
           >

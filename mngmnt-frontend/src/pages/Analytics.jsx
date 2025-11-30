@@ -32,10 +32,8 @@ const Analytics = () => {
   const fetchAnalytics = async () => {
     try {
       const res = await api.get("/analytics");
-
       if (res.data.success) {
         const analytics = res.data.data;
-
         setData({
           missedChats: analytics.missedChats || [],
           replyTime: formatReplyTime(analytics.avgReplyTime || 0),
@@ -53,6 +51,12 @@ const Analytics = () => {
   // Load analytics on mount
   useEffect(() => {
     fetchAnalytics();
+  }, []);
+
+  // Refresh every 30s so the chart reflects newly missed chats
+  useEffect(() => {
+    const id = setInterval(fetchAnalytics, 30000);
+    return () => clearInterval(id);
   }, []);
 
   if (loading) {
