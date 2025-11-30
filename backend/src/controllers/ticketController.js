@@ -13,41 +13,39 @@ const checkIfTicketIsMissed = async (ticket) => {
 
     // Calculate total missed chat time in milliseconds
     const missedChatMs =
-      (settings.missedChatTimer.hours || 0) * 60 * 60 * 1000 +
-      (settings.missedChatTimer.minutes || 0) * 60 * 1000 +
-      (settings.missedChatTimer.seconds || 0) * 1000;
+      Number(settings?.missedChatTimer?.hours || 0) * 60 * 60 * 1000 +
+      Number(settings?.missedChatTimer?.minutes || 0) * 60 * 1000 +
+      Number(settings?.missedChatTimer?.seconds || 0) * 1000;
 
     // If timer is 0, no missed chat logic
     if (missedChatMs === 0) return false;
 
-    // Get messages for this ticket
+    // Get messages for this ticket (oldest first)
     const messages = await Message.find({ ticketId: ticket._id }).sort({
       timestamp: 1,
     });
 
     // If no messages, not missed
-    if (messages.length === 0) return false;
+    if (!messages.length) return false;
 
-    // Check if there's at least one customer message
-    const hasCustomerMessage = messages.some((msg) => !msg.senderId);
-    if (!hasCustomerMessage) return false;
+    // Find the FIRST customer message (customer = no senderId)
+    const firstCustomerMsg = messages.find((m) => !m.senderId);
+    if (!firstCustomerMsg) return false;
 
-    // Check if there's at least one staff reply
-    const hasStaffReply = messages.some((msg) => msg.senderId);
+    const firstCustomerTime = new Date(
+      firstCustomerMsg.timestamp || firstCustomerMsg.createdAt
+    ).getTime();
 
-    // If staff has already replied, not missed
-    if (hasStaffReply) return false;
+    // If any staff reply happened AFTER the first customer message → not missed
+    const staffReplyAfterCustomer = messages.some((m) => {
+      if (!m.senderId) return false; // skip customer messages
+      const t = new Date(m.timestamp || m.createdAt).getTime();
+      return t > firstCustomerTime;
+    });
+    if (staffReplyAfterCustomer) return false;
 
-    // Get the first customer message (ticket creation time)
-    const firstMessage = messages[0];
-    const messageTime = new Date(
-      firstMessage.timestamp || firstMessage.createdAt
-    );
-    const now = new Date();
-    const timeDiff = now - messageTime;
-
-    // If time difference exceeds the timer, mark as missed
-    return timeDiff > missedChatMs;
+    // Otherwise, check if elapsed time since first customer message exceeds timer
+    return Date.now() - firstCustomerTime > missedChatMs;
   } catch (err) {
     console.error("Error checking missed ticket:", err);
     return false;
@@ -203,7 +201,7 @@ export const createTicket = async (req, res, next) => {
       hasInitialMessage: !!initialMessage,
     });
 
-    // assign to admin
+    // Assign to admin
     const admin = await User.findOne({ role: USER_ROLES.ADMIN });
     if (!admin) {
       return res.status(500).json({
@@ -274,7 +272,7 @@ export const updateTicket = async (req, res, next) => {
       });
     }
 
-    // member ownership check
+    // Member ownership check
     if (req.user.role === USER_ROLES.MEMBER) {
       const assignedToId = ticket.assignedTo?.toString();
       const currentUserId = req.user.id.toString();
@@ -324,7 +322,7 @@ export const assignTicket = async (req, res, next) => {
       });
     }
 
-    // verify user
+    // Verify user
     const user = await User.findById(memberId);
     if (!user) {
       return res.status(404).json({
@@ -386,7 +384,7 @@ export const getTicketStats = async (req, res, next) => {
   try {
     const query = {};
 
-    // member-only scope
+    // Member-only scope
     if (req.user.role === USER_ROLES.MEMBER) {
       query.assignedTo = req.user.id;
     }
