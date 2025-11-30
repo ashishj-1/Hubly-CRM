@@ -11,10 +11,10 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
   // Message input state
   const [message, setMessage] = useState("");
 
-  // NEW: Track if user has sent first message
+  // Track if user has sent first message
   const [userHasSentMessage, setUserHasSentMessage] = useState(false);
 
-  // NEW: Store user's first message
+  // Store user's first message
   const [userFirstMessage, setUserFirstMessage] = useState("");
 
   // Submission state
@@ -29,7 +29,7 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
     setError("");
   };
 
-  // NEW: Handle user sending first message
+  // Handle user sending first message
   const handleSendFirstMessage = () => {
     if (!message.trim()) return;
 
@@ -137,14 +137,14 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
             </div>
           )}
 
-          {/* CHANGED: Show user's first message if sent */}
+          {/* Show user's first message if sent */}
           {userHasSentMessage && userFirstMessage && (
             <div className="chat-message chat-message-user">
               <div className="chat-message-bubble">{userFirstMessage}</div>
             </div>
           )}
 
-          {/* CHANGED: Show form ONLY after user sends first message */}
+          {/* Show form ONLY after user sends first message */}
           {userHasSentMessage && !submitted && (
             <div className="chat-intro-form">
               <div className="chat-message-bot">
@@ -253,7 +253,7 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
-            // NEW: Handle Enter key to send message
+            // Handle Enter key to send message
             if (e.key === "Enter" && !userHasSentMessage && message.trim()) {
               handleSendFirstMessage();
             }
@@ -265,7 +265,7 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
         <button
           className="chat-popup-send"
           onClick={() => {
-            // NEW: Send first message when clicked
+            // Send first message when clicked
             if (!userHasSentMessage && message.trim()) {
               handleSendFirstMessage();
             }
