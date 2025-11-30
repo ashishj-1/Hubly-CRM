@@ -1,7 +1,58 @@
 import Ticket from "../models/Ticket.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import ChatbotSettings from "../models/ChatbotSettings.js";
 import { TICKET_STATUS, USER_ROLES } from "../config/constants.js";
+
+// Helper: Check if ticket is missed based on timer settings
+const checkIfTicketIsMissed = async (ticket) => {
+  try {
+    // Get chatbot settings for missed chat timer
+    const settings = await ChatbotSettings.findOne();
+    if (!settings) return false;
+
+    // Calculate total missed chat time in milliseconds
+    const missedChatMs =
+      (settings.missedChatTimer.hours || 0) * 60 * 60 * 1000 +
+      (settings.missedChatTimer.minutes || 0) * 60 * 1000 +
+      (settings.missedChatTimer.seconds || 0) * 1000;
+
+    // If timer is 0, no missed chat logic
+    if (missedChatMs === 0) return false;
+
+    // Get messages for this ticket
+    const messages = await Message.find({ ticketId: ticket._id }).sort({
+      timestamp: 1,
+    });
+
+    // If no messages, not missed
+    if (messages.length === 0) return false;
+
+    // Check if there's at least one customer message
+    const hasCustomerMessage = messages.some((msg) => !msg.senderId);
+    if (!hasCustomerMessage) return false;
+
+    // Check if there's at least one staff reply
+    const hasStaffReply = messages.some((msg) => msg.senderId);
+
+    // If staff has already replied, not missed
+    if (hasStaffReply) return false;
+
+    // Get the first customer message (ticket creation time)
+    const firstMessage = messages[0];
+    const messageTime = new Date(
+      firstMessage.timestamp || firstMessage.createdAt
+    );
+    const now = new Date();
+    const timeDiff = now - messageTime;
+
+    // If time difference exceeds the timer, mark as missed
+    return timeDiff > missedChatMs;
+  } catch (err) {
+    console.error("Error checking missed ticket:", err);
+    return false;
+  }
+};
 
 // GET /api/tickets (infinite scroll)
 export const getAllTickets = async (req, res, next) => {
@@ -36,7 +87,7 @@ export const getAllTickets = async (req, res, next) => {
       .sort({ lastMessageAt: -1, _id: -1 })
       .limit(parseInt(limit));
 
-    // NEW: Fetch last message for each ticket
+    // Fetch last message and check missed status for each ticket
     const ticketsWithLastMessage = await Promise.all(
       tickets.map(async (ticket) => {
         try {
@@ -46,9 +97,18 @@ export const getAllTickets = async (req, res, next) => {
             .limit(1)
             .select("text");
 
-          // Convert to plain object and add lastMessage
+          // Check if ticket is missed
+          const isMissed = await checkIfTicketIsMissed(ticket);
+
+          // Convert to plain object and add lastMessage + isMissed
           const ticketObj = ticket.toObject();
           ticketObj.lastMessage = lastMessage ? lastMessage.text : "";
+          ticketObj.isMissed = isMissed;
+
+          // Update ticket isMissed field in database if changed
+          if (ticket.isMissed !== isMissed) {
+            await Ticket.findByIdAndUpdate(ticket._id, { isMissed });
+          }
 
           return ticketObj;
         } catch (err) {
@@ -58,6 +118,7 @@ export const getAllTickets = async (req, res, next) => {
           );
           const ticketObj = ticket.toObject();
           ticketObj.lastMessage = "";
+          ticketObj.isMissed = false;
           return ticketObj;
         }
       })
@@ -111,9 +172,18 @@ export const getTicketById = async (req, res, next) => {
       .populate("senderId", "firstName lastName role")
       .sort({ timestamp: 1 });
 
+    // Check if ticket is missed
+    const isMissed = await checkIfTicketIsMissed(ticket);
+
+    // Update ticket if missed status changed
+    if (ticket.isMissed !== isMissed) {
+      ticket.isMissed = isMissed;
+      await ticket.save();
+    }
+
     res.json({
       success: true,
-      ticket,
+      ticket: { ...ticket.toObject(), isMissed },
       messages,
     });
   } catch (error) {
@@ -121,7 +191,7 @@ export const getTicketById = async (req, res, next) => {
   }
 };
 
-// POST /api/tickets
+// POST /api/tickets (public create with initial message)
 export const createTicket = async (req, res, next) => {
   try {
     const { userName, userEmail, userPhone, initialMessage } = req.body;
@@ -133,7 +203,7 @@ export const createTicket = async (req, res, next) => {
       hasInitialMessage: !!initialMessage,
     });
 
-    // Assign to admin
+    // assign to admin
     const admin = await User.findOne({ role: USER_ROLES.ADMIN });
     if (!admin) {
       return res.status(500).json({
@@ -191,7 +261,7 @@ export const createTicket = async (req, res, next) => {
   }
 };
 
-// PUT /api/tickets/:id
+// PUT /api/tickets/:id (status update)
 export const updateTicket = async (req, res, next) => {
   try {
     const { status } = req.body;
@@ -204,7 +274,7 @@ export const updateTicket = async (req, res, next) => {
       });
     }
 
-    // Member ownership check
+    // member ownership check
     if (req.user.role === USER_ROLES.MEMBER) {
       const assignedToId = ticket.assignedTo?.toString();
       const currentUserId = req.user.id.toString();
@@ -254,7 +324,7 @@ export const assignTicket = async (req, res, next) => {
       });
     }
 
-    // Verify user
+    // verify user
     const user = await User.findById(memberId);
     if (!user) {
       return res.status(404).json({
@@ -316,7 +386,7 @@ export const getTicketStats = async (req, res, next) => {
   try {
     const query = {};
 
-    // Member-only scope
+    // member-only scope
     if (req.user.role === USER_ROLES.MEMBER) {
       query.assignedTo = req.user.id;
     }
