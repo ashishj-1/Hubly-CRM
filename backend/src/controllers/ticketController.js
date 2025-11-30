@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import ChatbotSettings from "../models/ChatbotSettings.js";
 import { TICKET_STATUS, USER_ROLES } from "../config/constants.js";
 
-/* MISSED CHAT HELPER */
+/* Missed chat helper */
 const checkIfTicketIsMissed = async (ticket) => {
   try {
     const settings = await ChatbotSettings.findOne();
@@ -23,7 +23,6 @@ const checkIfTicketIsMissed = async (ticket) => {
     });
     if (!messages.length) return false;
 
-    // First CUSTOMER message
     const firstCustomer = messages.find((m) => !m.senderId);
     if (!firstCustomer) return false;
 
@@ -45,7 +44,7 @@ const checkIfTicketIsMissed = async (ticket) => {
   }
 };
 
-/* GET ALL TICKETS */
+/* Get all tickets */
 export const getAllTickets = async (req, res, next) => {
   try {
     const { limit = 20, lastId, status, search } = req.query;
@@ -116,7 +115,7 @@ export const getAllTickets = async (req, res, next) => {
   }
 };
 
-/* GET SINGLE TICKET */
+/* Get single ticket */
 export const getTicketById = async (req, res, next) => {
   try {
     const ticket = await Ticket.findById(req.params.id).populate(
@@ -161,7 +160,7 @@ export const getTicketById = async (req, res, next) => {
   }
 };
 
-/* CREATE TICKET */
+/* Create ticket */
 export const createTicket = async (req, res, next) => {
   try {
     const { userName, userEmail, userPhone, initialMessage } = req.body;
@@ -214,7 +213,7 @@ export const createTicket = async (req, res, next) => {
   }
 };
 
-/* UPDATE TICKET */
+/* Update ticket */
 export const updateTicket = async (req, res, next) => {
   try {
     const { status } = req.body;
@@ -251,7 +250,7 @@ export const updateTicket = async (req, res, next) => {
   }
 };
 
-/* ASSIGN TICKET */
+/* Assign ticket */
 export const assignTicket = async (req, res, next) => {
   try {
     const memberId = req.body.assignedTo || req.body.userId;
@@ -296,7 +295,7 @@ export const assignTicket = async (req, res, next) => {
   }
 };
 
-/* DELETE TICKET */
+/* Delete ticket */
 export const deleteTicket = async (req, res, next) => {
   try {
     const ticket = await Ticket.findById(req.params.id);
@@ -314,7 +313,7 @@ export const deleteTicket = async (req, res, next) => {
   }
 };
 
-/* ANALYTICS / STATS */
+/* Analytics */
 /* Recomputes isMissed before returning counts so charts stay fresh */
 export const getTicketStats = async (req, res, next) => {
   try {

@@ -14,7 +14,7 @@ const VISIBLE_ROWS = 3; // Total visible rows in the container
 
 const idxToValue = (i, base) => ((i % base) + base) % base;
 
-// SECOND visible row is the selection row.
+// Scond visible row is the selection row.
 // selectedIndex = topRowIndex + 1
 // index -> scrollTop  : (idx - 1) * ROW_H
 // scrollTop -> index  : Math.round(scrollTop / ROW_H) + 1
@@ -36,7 +36,6 @@ function useInfiniteWheel(value, max, onChange) {
     const target = MID_BLOCK + (Number(value) || 0);
     setCurrentIndex(target);
     if (ref.current) {
-      // align selected item to SECOND row
       const scrollTop = (target - 1) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "instant" });
     }
@@ -48,7 +47,6 @@ function useInfiniteWheel(value, max, onChange) {
       const normalized = idxToValue(idx, base);
       const midIdx = MID_BLOCK + normalized;
       setCurrentIndex(midIdx);
-      // keep SECOND row alignment
       const scrollTop = (midIdx - 1) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "instant" });
       return midIdx;
@@ -58,10 +56,8 @@ function useInfiniteWheel(value, max, onChange) {
 
   const snap = () => {
     if (!ref.current) return;
-    // compute selected index from SECOND row
     let idx = Math.round(ref.current.scrollTop / ROW_H) + 1;
     idx = recenterIfNearEdges(idx);
-    // snap so that selected sits on SECOND row
     const scrollTop = (idx - 1) * ROW_H;
     if (Math.abs(ref.current.scrollTop - scrollTop) > 0.5) {
       ref.current.scrollTo({ top: scrollTop, behavior: "smooth" });
@@ -75,7 +71,6 @@ function useInfiniteWheel(value, max, onChange) {
 
   const onScroll = () => {
     if (!ref.current) return;
-    // index based on SECOND row selection
     let idx = Math.round(ref.current.scrollTop / ROW_H) + 1;
     idx = recenterIfNearEdges(idx);
     if (idx !== currentIndex) {
@@ -89,7 +84,6 @@ function useInfiniteWheel(value, max, onChange) {
     const next = currentIndex + direction;
     setCurrentIndex(next);
     if (ref.current) {
-      // maintain SECOND row alignment
       const scrollTop = (next - 1) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "auto" });
     }
