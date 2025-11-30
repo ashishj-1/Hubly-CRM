@@ -14,6 +14,11 @@ const VISIBLE_ROWS = 3; // Total visible rows in the container
 
 const idxToValue = (i, base) => ((i % base) + base) % base;
 
+// Use the SECOND visible row as the selection row.
+// That means: selectedIndex = topRowIndex + 1
+// Mapping (index -> scrollTop) becomes (idx - 2) * ROW_H
+// Mapping (scrollTop -> index) becomes round(scrollTop / ROW_H) + 2
+
 function useInfiniteWheel(value, max, onChange) {
   const base = max + 1;
   const COUNT = base * CYCLES;
@@ -31,7 +36,7 @@ function useInfiniteWheel(value, max, onChange) {
     const target = MID_BLOCK + (Number(value) || 0);
     setCurrentIndex(target);
     if (ref.current) {
-      const scrollTop = (target - 1) * ROW_H;
+      const scrollTop = (target - 2) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "instant" });
     }
   }, [value, max]);
@@ -42,7 +47,7 @@ function useInfiniteWheel(value, max, onChange) {
       const normalized = idxToValue(idx, base);
       const midIdx = MID_BLOCK + normalized;
       setCurrentIndex(midIdx);
-      const scrollTop = (midIdx - 1) * ROW_H;
+      const scrollTop = (midIdx - 2) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "instant" });
       return midIdx;
     }
@@ -51,9 +56,9 @@ function useInfiniteWheel(value, max, onChange) {
 
   const snap = () => {
     if (!ref.current) return;
-    let idx = Math.round((ref.current.scrollTop + ROW_H) / ROW_H);
+    let idx = Math.round(ref.current.scrollTop / ROW_H) + 2;
     idx = recenterIfNearEdges(idx);
-    const scrollTop = (idx - 1) * ROW_H;
+    const scrollTop = (idx - 2) * ROW_H;
     if (Math.abs(ref.current.scrollTop - scrollTop) > 0.5) {
       ref.current.scrollTo({ top: scrollTop, behavior: "smooth" });
     }
@@ -66,8 +71,7 @@ function useInfiniteWheel(value, max, onChange) {
 
   const onScroll = () => {
     if (!ref.current) return;
-    // Calculate index based on middle row
-    let idx = Math.round((ref.current.scrollTop + ROW_H) / ROW_H);
+    let idx = Math.round(ref.current.scrollTop / ROW_H) + 2;
     idx = recenterIfNearEdges(idx);
     if (idx !== currentIndex) {
       setCurrentIndex(idx);
@@ -80,7 +84,7 @@ function useInfiniteWheel(value, max, onChange) {
     const next = currentIndex + direction;
     setCurrentIndex(next);
     if (ref.current) {
-      const scrollTop = (next - 1) * ROW_H;
+      const scrollTop = (next - 2) * ROW_H;
       ref.current.scrollTo({ top: scrollTop, behavior: "auto" });
     }
     onChange(idxToValue(next, base));
