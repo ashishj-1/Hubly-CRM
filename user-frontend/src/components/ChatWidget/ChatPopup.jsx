@@ -199,7 +199,7 @@ const ChatPopup = ({ settings, onClose, formSubmitted, onFormSubmit }) => {
             </div>
           )}
 
-          {/* Thank-you message after form submission */}
+          {/* Thank-you message after form submission!! */}
           {submitted && (
             <div className="chat-message chat-message-bot">
               <img

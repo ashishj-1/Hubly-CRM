@@ -81,7 +81,7 @@ const ChatWidget = () => {
     setShowWelcome(false);
   }, []);
 
-  // Mark form as submitted
+  // Mark form as submitted!
   const handleFormSubmit = useCallback(() => {
     setFormSubmitted(true);
   }, []);
