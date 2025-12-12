@@ -1,0 +1,73 @@
+:root {
+  --brand: #334755;
+  --overlay: rgba(255, 255, 255, 0.9);
+  --muted: #666666;
+}
+
+/* Loader Container */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Fullscreen Loader Overlay */
+.loader-fullscreen {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  z-index: 9999;
+}
+
+/* Loader Wrapper */
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Loader Spinner Base */
+.loader-spinner {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--brand);
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Small Spinner */
+.loader-small .loader-spinner {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+/* Medium Spinner */
+.loader-medium .loader-spinner {
+  width: 36px;
+  height: 36px;
+  border-width: 3px;
+}
+
+/* Large Spinner */
+.loader-large .loader-spinner {
+  width: 50px;
+  height: 50px;
+  border-width: 4px;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loader Text */
+.loader-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}

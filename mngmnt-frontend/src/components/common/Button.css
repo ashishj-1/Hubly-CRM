@@ -1,0 +1,82 @@
+/* Base button styles */
+.btn {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.625rem var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--transition-base),
+    transform var(--transition-base), box-shadow var(--transition-base),
+    opacity var(--transition-base);
+}
+
+/* Disabled state */
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Full-width button */
+.btn-full {
+  width: 100%;
+}
+
+/* Primary button */
+.btn-primary {
+  color: var(--white);
+  background-color: var(--primary-color);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary button */
+.btn-secondary {
+  color: var(--gray-700);
+  background-color: var(--gray-200);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--gray-300);
+}
+
+/* Danger button */
+.btn-danger {
+  color: var(--white);
+  background-color: var(--error-color);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+/* Loading state */
+.btn-loading {
+  pointer-events: none;
+}
+
+/* Spinner animation */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Spin animation keyframes */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

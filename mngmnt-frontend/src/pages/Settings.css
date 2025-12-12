@@ -1,0 +1,359 @@
+/* Layout */
+.settings-layout {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+}
+
+/* Right content container */
+.settings-content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  margin-left: 80px;
+}
+
+/* Page Header */
+.settings-header {
+  margin-bottom: 24px;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #6a6b70;
+}
+
+/* Main Section Card */
+.settings-section {
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+/* Tabs */
+.settings-tabs {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-tab {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666;
+  position: relative;
+}
+
+.settings-tab-active {
+  color: #184e7f;
+}
+
+.settings-tab-active::after {
+  content: "";
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  position: absolute;
+  background: #184e7f;
+}
+
+/* Form */
+.settings-form {
+  max-width: 500px;
+}
+
+.settings-form-group {
+  margin-bottom: 20px;
+}
+
+.settings-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333333;
+}
+
+.settings-form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  transition: border-color 0.2s ease;
+}
+
+.settings-form-group input:focus {
+  outline: none;
+  border-color: #334755;
+}
+
+.settings-form-group input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Input with icon */
+.settings-input-with-icon {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.settings-input-with-icon input {
+  flex: 1;
+}
+
+.settings-info-icon {
+  right: -30px;
+  cursor: help;
+  color: #999999;
+  position: absolute;
+}
+
+/* Form actions */
+.settings-form-actions {
+  display: flex;
+  margin-top: 32px;
+  margin-right: -100%;
+  justify-content: flex-end;
+}
+
+/* Save button */
+.settings-save-btn {
+  border: none;
+  cursor: pointer;
+  min-width: 260px;
+  padding: 14px 48px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  background: #184e7f;
+  transition: background 0.2s ease;
+}
+
+.settings-save-btn:hover {
+  background: #243542;
+}
+
+.settings-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Chatbot Settings */
+.chatbot-settings {
+  gap: 40px;
+  display: flex;
+}
+
+/* Left preview */
+.chatbot-preview {
+  flex: 1;
+  max-width: 400px;
+}
+
+/* Right settings controls */
+.chatbot-controls {
+  flex: 1;
+}
+
+/* Each control block */
+.chatbot-control-section {
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.chatbot-control-title {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* Color Selector */
+.chatbot-color-options {
+  gap: 12px;
+  display: flex;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.chatbot-color-option {
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  transition: border-color 0.2s ease;
+}
+
+.chatbot-color-option.selected {
+  border-color: #334755;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #334755;
+}
+
+/* Custom color input */
+.chatbot-color-input {
+  gap: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.chatbot-color-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.chatbot-color-input input {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-family: monospace;
+}
+
+/* Message Items */
+.chatbot-message-input {
+  gap: 10px;
+  display: flex;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.chatbot-message-input input {
+  flex: 1;
+  border: none;
+  font-size: 14px;
+}
+
+.chatbot-message-input input:focus {
+  outline: none;
+}
+
+.chatbot-message-edit-btn {
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  background: none;
+  color: #666666;
+}
+
+/* Form Preview */
+.chatbot-form-preview {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.chatbot-form-field {
+  margin-bottom: 12px;
+}
+
+.chatbot-form-field label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #666666;
+}
+
+.chatbot-form-field input {
+  width: 100%;
+  font-size: 14px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Welcome textarea */
+.chatbot-welcome-textarea {
+  width: 100%;
+  padding: 12px;
+  resize: vertical;
+  min-height: 80px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.chatbot-welcome-count {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #999999;
+  text-align: right;
+}
+
+/* Timer */
+.chatbot-timer {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-timer-picker {
+  text-align: center;
+}
+
+.chatbot-timer-value {
+  min-width: 60px;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.chatbot-timer-nav {
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-timer-btn {
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  background: none;
+  color: #666666;
+}
+
+.chatbot-timer-separator {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .chatbot-settings {
+    flex-direction: column;
+  }
+
+  .chatbot-preview {
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 16px;
+    margin-left: 0;
+  }
+}
